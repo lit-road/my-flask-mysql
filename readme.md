@@ -2,7 +2,10 @@
 
 ## 安装环境
 
+〉 环境： VM + debian 11
+
 ```bash
+# 安装 mysql
 sudo wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
 
 sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
@@ -19,8 +22,10 @@ sudo apt-get install mysql-server --fix-missing
 
 sudo service mysql status
 
+# 安装python3
 sudo apt install python3 -y
 
+# 安装nginx
 sudo apt install nginx
 
 ```
@@ -28,11 +33,12 @@ sudo apt install nginx
 ## 配置环境
 
 ```bash
+# 配置python环境
 python3 -m venv venv
 
 source venv/bin/activate
 
-pip install Flask Flask-SQLAlchemy mysql-connector-python
+pip install Flask Flask-SQLAlchemy mysql-connector-python flask_cors
 ```
 
 ## 开发后端
@@ -45,6 +51,8 @@ touch ./server/app.py
 
 ## 配置脚本
 
+〉用作同时管理前后端
+
 ```bash
 mkdir scripts
 
@@ -52,6 +60,9 @@ touch scripts/start.bash
 ```
 
 ## 开发前端
+
+> 使用的是degit + Uninen/vite-ts-tailwind-starter 模板
+> 包含 ts+vite+tailwind
 
 ```bash
 mkdir renderers
@@ -62,7 +73,11 @@ npx degit github:Uninen/vite-ts-tailwind-starter --force
 
 pnpm i
 
+# 开发
+pnpm run dev
 ```
+
+前端代码在 renderers/src/pages/IndexPage.vue
 
 ## 配置代理
 
@@ -71,6 +86,8 @@ cd /etc/nginx/sites-available/
 
 sudo touch frontend
 ```
+
+通过 front.localhost.com 访问指定文件
 
 ```code
 server {
@@ -99,6 +116,8 @@ server {
 sudo touch api
 ```
 
+通过nginx 指定后端接口
+
 ```code
 server {
     listen 80;
@@ -114,15 +133,18 @@ server {
 }
 ```
 
+软连接到 配置的文件，并修改本地开发环境的hosts 指定到开发服务器
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enab
-led/
+sudo ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled/
 
 sudo systemctl restart nginx.service
 
 sudo nano /etc/hosts
 ```
+
+hosts 文件修改内容
 
 ```code
 127.0.0.1 front.localhost.com
@@ -130,6 +152,10 @@ sudo nano /etc/hosts
 ```
 
 ## 配置数据库
+
+1、创建数据库
+2、创建数据表
+3、添加测试数据
 
 ```mysql&bash
 # sudo mysql -u root -p

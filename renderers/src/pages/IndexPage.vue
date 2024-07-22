@@ -1,9 +1,10 @@
 <script setup lang="ts">
+// 
 // const store = useStore()
-import axios from 'axios'
-import { ref, reactive } from 'vue'
+import axios              from 'axios'
+import { ref, reactive }  from 'vue'
 import type { FormRules } from 'element-plus'
-import { de } from 'element-plus/es/locales.mjs';
+import { de }             from 'element-plus/es/locales.mjs';
 
 interface RuleForm {
   id?: number
@@ -12,11 +13,7 @@ interface RuleForm {
 }
 
 const dialogFormVisible = ref(false)
-const tableData = ref([
-  { id: '1', name: '王小虎', gender: 'male' },
-  { id: '1', name: '王小虎', gender: 'male' },
-  { id: '1', name: '王小虎', gender: 'male' },
-])
+const tableData = ref([])
 const form = reactive<RuleForm>({
   name: '',
   gender: 'male',
@@ -29,6 +26,9 @@ const rules = reactive<FormRules<RuleForm>>({
   gender: [{ required: true, message: 'Please select gender', trigger: 'change' }],
 })
 
+/* 
+获取所有数据 ，分页应该在此处添加参数
+*/
 const getTableData = async () => {
   try {
     const res = await axios.get('http://api.localhost.com/get_user_list')
@@ -39,6 +39,9 @@ const getTableData = async () => {
   }
 }
 
+/* 
+提交表单，为了视图，这里做一个判断，然后分开处理
+*/
 const submit = async () => {
   console.log('submit')
   if (form.id) {
@@ -48,6 +51,9 @@ const submit = async () => {
   }
 }
 
+/*
+添加user，这里使用了axios，可以使用fetch
+*/
 const addUser = async () => {
   try {
     await axios.post('http://api.localhost.com/add_user', form)
@@ -59,6 +65,9 @@ const addUser = async () => {
   }
 }
 
+/* 
+更新user
+*/
 const editUser = async () => {
   try {
     await axios.put(`http://api.localhost.com/edit_user/${form.id}`, form)
@@ -71,7 +80,10 @@ const editUser = async () => {
   }
 }
 
-const edit = (index: number, row: RuleForm) => {
+/* 
+更新按钮的点击事件
+*/
+const editEvent = (index: number, row: RuleForm) => {
   console.log(index, row)
   form.id = row.id
   form.name = row.name
@@ -90,7 +102,7 @@ getTableData()
       <el-table-column prop="gender" label="gender" min-width="80"></el-table-column>
       <el-table-column fixed="right" label="Operations" min-width="180">
         <template #default="scope">
-          <el-button type="primary" @click="edit(scope.$index, scope.row)">Edit</el-button>
+          <el-button type="primary" @click="editEvent(scope.$index, scope.row)">Edit</el-button>
         </template>
       </el-table-column>
     </el-table>

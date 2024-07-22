@@ -1,11 +1,12 @@
 import { unheadVueComposablesImports } from '@unhead/vue'
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'node:url'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { defineConfig } from 'vite'
-import { version as pkgVersion } from './package.json'
+import vue                             from '@vitejs/plugin-vue'
+import { fileURLToPath, URL }          from 'node:url'
+import AutoImport                      from 'unplugin-auto-import/vite'
+import Components                      from 'unplugin-vue-components/vite'
+// 使用了element-plus 第三方库
+import { ElementPlusResolver }         from 'unplugin-vue-components/resolvers'
+import { defineConfig }                from 'vite'
+import { version as pkgVersion }       from './package.json'
 
 process.env.VITE_APP_VERSION = pkgVersion
 if (process.env.NODE_ENV === 'production') {
